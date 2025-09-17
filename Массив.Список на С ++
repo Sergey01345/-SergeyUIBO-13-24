@@ -1,0 +1,210 @@
+Работа с массивом (статическим и динамическим)
+using namespace std;
+#include <iostream>
+#include <algorithm> // для сортировки
+#include <stdexcept> // для исключений
+// Функция для вывода массива
+void printArray(int arr[], int size, const string& message = "Массив:") {
+    cout << message << " ";
+    for (int i = 0; i < size; i++) {
+        cout << arr[i] << " ";
+    }
+    cout << endl;
+}
+
+// Функция для поиска элемента в массиве
+int findElement(int arr[], int size, int target) {
+    for (int i = 0; i < size; i++) {
+        if (arr[i] == target) {
+            return i;
+        }
+    }
+    return -1; // элемент не найден
+}
+
+// Функция для вычисления суммы элементов массива
+int arraySum(int arr[], int size) {
+    int sum = 0;
+    for (int i = 0; i < size; i++) {
+        sum += arr[i];
+    }
+    return sum;
+}
+
+int main() {
+    cout << "=== ПРОГРАММА ДЛЯ РАБОТЫ С МАССИВАМИ ===" << endl << endl;
+    
+    // Статический массив
+    const int STATIC_SIZE = 5;
+    int staticArray[STATIC_SIZE] = {5, 2, 8, 1, 9};
+    
+    cout << "1. Статический массив:" << endl;
+    printArray(staticArray, STATIC_SIZE, "Исходный массив:");
+    
+    // Сортировка статического массива
+    sort(staticArray, staticArray + STATIC_SIZE);
+    printArray(staticArray, STATIC_SIZE, "Отсортированный массив:");
+    
+    // Поиск элемента
+    int searchValue = 8;
+    int index = findElement(staticArray, STATIC_SIZE, searchValue);
+    if (index != -1) {
+        cout << "Элемент " << searchValue << " найден на позиции " << index << endl;
+    } else {
+        cout << "Элемент " << searchValue << " не найден" << endl;
+    }
+    
+    cout << "Сумма элементов: " << arraySum(staticArray, STATIC_SIZE) << endl << endl;
+    
+    // Динамический массив
+    int dynamicSize;
+    cout << "2. Динамический массив:" << endl;
+    cout << "Введите размер массива: ";
+    cin >> dynamicSize;
+    
+    if (dynamicSize <= 0) {
+        cout << "Неверный размер массива!" << endl;
+        return 1;
+    }
+    
+    // Выделение памяти для динамического массива
+    int* dynamicArray = new int[dynamicSize];
+    
+    cout << "Введите " << dynamicSize << " элементов:" << endl;
+    for (int i = 0; i < dynamicSize; i++) {
+        cout << "Элемент " << i + 1 << ": ";
+        cin >> dynamicArray[i];
+    }
+    
+    printArray(dynamicArray, dynamicSize, "Введенный массив:");
+    
+    // Нахождение максимального и минимального элементов
+    int maxElement = dynamicArray[0];
+    int minElement = dynamicArray[0];
+    
+    for (int i = 1; i < dynamicSize; i++) {
+        if (dynamicArray[i] > maxElement) {
+            maxElement = dynamicArray[i];
+        }
+        if (dynamicArray[i] < minElement) {
+            minElement = dynamicArray[i];
+        }
+    }
+    
+    cout << "Максимальный элемент: " << maxElement << endl;
+    cout << "Минимальный элемент: " << minElement << endl;
+    cout << "Среднее значение: " << (double)arraySum(dynamicArray, dynamicSize) / dynamicSize << endl;
+    
+    // Освобождение памяти
+    delete[] dynamicArray;
+    
+    return 0;
+}
+Работа со списком 
+#include <iostream>
+#include <list>
+#include <algorithm>
+#include <iterator>
+
+using namespace std;
+
+// Функция для вывода списка
+void printList(const list<int>& lst, const string& message = "Список:") {
+    cout << message << " ";
+    for (const auto& element : lst) {
+        cout << element << " ";
+    }
+    cout << endl;
+}
+
+// Функция для поиска элемента в списке
+bool findInList(const list<int>& lst, int target) {
+    return find(lst.begin(), lst.end(), target) != lst.end();
+}
+
+// Функция для удаления всех вхождений элемента
+void removeAllOccurrences(list<int>& lst, int value) {
+    lst.remove(value);
+}
+
+// Функция для объединения двух списков
+list<int> mergeLists(const list<int>& list1, const list<int>& list2) {
+    list<int> result = list1;
+    result.insert(result.end(), list2.begin(), list2.end());
+    return result;
+}
+
+int main() {
+    cout << "=== ПРОГРАММА ДЛЯ РАБОТЫ СО СПИСКАМИ ===" << endl << endl;
+    
+    // Создание и инициализация списка
+    list<int> myList = {7, 3, 5, 2, 8, 3, 1};
+    
+    cout << "1. Базовые операции со списком:" << endl;
+    printList(myList, "Исходный список:");
+    
+    // Добавление элементов
+    myList.push_back(10);    // в конец
+    myList.push_front(0);    // в начало
+    
+    printList(myList, "После добавления 0 и 10:");
+    
+    // Сортировка списка
+    myList.sort();
+    printList(myList, "Отсортированный список:");
+    
+    // Удаление дубликатов
+    myList.unique();
+    printList(myList, "После удаления дубликатов:");
+    
+    // Поиск элемента
+    int searchValue = 5;
+    if (findInList(myList, searchValue)) {
+        cout << "Элемент " << searchValue << " найден в списке" << endl;
+    } else {
+        cout << "Элемент " << searchValue << " не найден" << endl;
+    }
+    
+    // Удаление элемента
+    int removeValue = 3;
+    removeAllOccurrences(myList, removeValue);
+    printList(myList, "После удаления всех вхождений " + to_string(removeValue) + ":");
+    
+    cout << endl << "2. Работа с несколькими списками:" << endl;
+    
+    // Создание второго списка
+    list<int> secondList = {15, 20, 25};
+    printList(secondList, "Второй список:");
+    
+    // Объединение списков
+    list<int> mergedList = mergeLists(myList, secondList);
+    printList(mergedList, "Объединенный список:");
+    
+    // Реверс списка
+    mergedList.reverse();
+    printList(mergedList, "Развернутый список:");
+    
+    cout << endl << "3. Размер и проверка пустоты:" << endl;
+    cout << "Размер списка: " << mergedList.size() << endl;
+    cout << "Список " << (mergedList.empty() ? "пустой" : "не пустой") << endl;
+    
+    // Получение первого и последнего элементов
+    if (!mergedList.empty()) {
+        cout << "Первый элемент: " << mergedList.front() << endl;
+        cout << "Последний элемент: " << mergedList.back() << endl;
+    }
+    
+    // Очистка списка
+    list<int> tempList = {1, 2, 3, 4, 5};
+    cout << endl << "До очистки: ";
+    printList(tempList);
+    cout << "Размер: " << tempList.size() << endl;
+    
+    tempList.clear();
+    cout << "После очистки: ";
+    printList(tempList);
+    cout << "Размер: " << tempList.size() << endl;
+    cout << "Список " << (tempList.empty() ? "пустой" : "не пустой") << endl;
+    
+    return 0;
+}
